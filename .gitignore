@@ -1,0 +1,5 @@
+**/*.out
+**/*.yy.c
+**/*.output
+**/*.tab.c
+**/*.tab.h
