@@ -19,6 +19,12 @@ Palavra: str
 %%
 #include "lex.yy.c"
 
+typedef struct singleTerm{
+    char *term;
+    char *definition;
+    char *sinonyms[];
+}*SingleTerm;
+
 int yyerror(char *m){
     printf("Erro Sintático %s\n", m);
 }
