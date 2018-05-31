@@ -3,15 +3,16 @@
 %}
 
 %%
-Dicionario: LinhaDic
-          | LinhasDic ';' LinhaDic
+Dicionario: LinhaDic LinhasDic '.'
           ;
-LinhaDic:
-        | LinhasDic ';' LinhaDic
-        ;
+LinhasDic:
+         | ';' LinhaDic LinhasDic
+         ;
 LinhaDic: Palavra ':' Palavra ':' '[' ListaSin ']'
         ;
 ListaSin:
-        | ListaSin ';' Palavra
+        | Palavra ',' ListaSin
         ;
+Palavra: str
+       ;
 %%
