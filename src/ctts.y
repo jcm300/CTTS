@@ -1,6 +1,7 @@
-%{
-
-%}
+%union{
+    char * s;
+}
+%token <s> str;
 
 %%
 Dicionario: LinhaDic LinhasDic '.'
@@ -16,3 +17,13 @@ ListaSin:
 Palavra: str
        ;
 %%
+#include "lex.yy.c"
+
+int yyerror(char *m){
+    printf("Erro Sintático %s\n", m);
+}
+
+int main(){
+    yyparse();
+    return 0;
+}
