@@ -5,14 +5,18 @@
 %union{
     char *p;
     char *s;
+    SingleTerm *st;
+    Sinonym *sm;
 }
 %token <p> pal;
 %token <s> str;
 
 %type <p> Palavra
 %type <s> Significado
+%type <sm> ListaSin
+%type <st> LinhasDic LinhaDic 
 %%
-Dicionario: LinhaDic LinhasDic '.'                      {}
+Dicionario: LinhaDic LinhasDic '.'                      {dictionary=unionST($1,$2);}
           ;
 LinhasDic:                                              {$$=NULL;}
          | ';' LinhaDic LinhasDic                       {$$=unionST($2,$3);}
@@ -41,7 +45,7 @@ typedef struct singleTerm{
     struct singleTerm *next;
 }*SingleTerm;
 
-SingleTerm *unionST(SingleTerm* st, SingleTerm** dict){
+SingleTerm *unionST(SingleTerm* st, SingleTerm* dict){
     (*st)->next=*dict;   
     dict=st;
     return dict;
