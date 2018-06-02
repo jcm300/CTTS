@@ -1,5 +1,6 @@
 %{
-    SingleTerm **dictionary;
+    SingleTerm *dictionary=(SingleTerm*)malloc(sizeof(SingleTerm));
+    *dictionary=NULL;
 %}
 %union{
     char *p;
@@ -7,6 +8,9 @@
 }
 %token <p> pal;
 %token <s> str;
+
+%type <p> Palavra
+%type <s> Significado
 %%
 Dicionario: LinhaDic LinhasDic '.'                      {}
           ;
@@ -34,7 +38,14 @@ typedef struct singleTerm{
     char *term;
     char *definition;
     Sinonym *sinonyms;
+    struct singleTerm *next;
 }*SingleTerm;
+
+SingleTerm *unionST(SingleTerm* st, SingleTerm** dict){
+    (*st)->next=*dict;   
+    dict=st;
+    return dict;
+}
 
 Sinonym *createSin(char *word, Sinonym *list){
     Sinonym *aux = (char **)malloc(sizeof(void*));
@@ -48,6 +59,7 @@ SingleTerm *createSingleTerm(char *t, char *d, char *ss){
     aux->term = strdup(t);
     aux->definition = strdup(d);
     aux->sinonyms = ss;
+    aux->next=NULL;
     return aux;
 }
 
