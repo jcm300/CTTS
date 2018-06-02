@@ -1,0 +1,10 @@
+cinema : "do grego: – kinema 'movimento'. Que significa a arte/técnica de fixar/reproduzir imagens que criam ilusão de movimento produzem movimento." : cinema : [cinematografia];
+roteiro : "a história do filme escrita em papel. Com as falas e tudo que for pertinente para a composição do filme." : script : [argumento,guião];
+quadro : "a imagem única estática do filme, é a menor unidade de um filme. Várias imagens (frames) geram ilusão de movimento. Em geral, o ritmo é 24 quadros por segundo. Hoje em dia não é necessário mais gravar em película, devido a digitalização do cinema." : frame : [frame,fotograma];
+tomada : "tudo que é registrado pela câmera (do play ao stop)." : take : [take];
+plano : "pedaço sem interrupção no filme, o que não é cortado na filmagem." : plan : [];
+cena : "sequência de planos em uma mesma locação e em um mesmo tempo (sem elipse). Quando muda a locação, muda-se a cena." : scene : [];
+sequência : "conjunto de cenas (duas ou mais cenas) que formam um “capítulo” narrativo." : sequence : [];
+enquadramento : "enquadrar é estabelecer o que fará parte do filme no momento de sua realização. Em termo mais operacional, é definir a forma como o espectador captará o universo criado no filme. O enquadramento é dependente de três elementos: plano, ângulo e lado do ângulo." : framing : [];
+corte : "após o registro em tomada, o filme deve ser cortado. Corte é a passagem entre dois planos." : cut : [];
+elipse : "salto temporal que não mostra a passagem do tempo." : ellipse : [].
