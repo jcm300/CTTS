@@ -33,17 +33,17 @@ SingleTerm createSingleTerm(char *, char *, char *, Sinonym );
 %type <sm> ListaSin
 %type <st> LinhasDic LinhaDic 
 %%
-Dicionario: LinhaDic LinhasDic '.'                      {dictionary=unionST($1,$2);}
+Dicionario: LinhaDic LinhasDic '.'                                  {dictionary=unionST($1,$2);}
           ;
-LinhasDic:                                              {$$=NULL;}
-         | ';' LinhaDic LinhasDic                       {$$=unionST($2,$3);}
+LinhasDic:                                                          {$$=NULL;}
+         | ';' LinhaDic LinhasDic                                   {$$=unionST($2,$3);}
          ;
 LinhaDic: Palavra ':' Significado ':' Palavra ':' '[' ListaSin ']'  {$$=createSingleTerm($1,$3,$5,$8);}
         ;
-ListaSin:                                               {$$=NULL;}
-        | Palavra ',' ListaSin                          {$$=createSin($1,$3);}
+ListaSin:                                                           {$$=NULL;}
+        | Palavra ',' ListaSin                                      {$$=createSin($1,$3);}
         ;
-Palavra: pal                                            {$$=$1;}
+Palavra: pal                                                        {$$=$1;}
        ;
 Significado: str
            ;
