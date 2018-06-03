@@ -25,27 +25,30 @@ SingleTerm createSingleTerm(char *, char *, char *, Sinonym );
     SingleTerm st;
     Sinonym sm;
 }
-%token <p> pal;
-%token <s> str;
+%token <p> pal
+%token <s> str
 
 %type <p> Palavra
 %type <s> Significado
-%type <sm> ListaSin
+%type <sm> ListaSin Sinonimos
 %type <st> LinhasDic LinhaDic 
 %%
-Dicionario: LinhaDic LinhasDic '.'                                  {dictionary=unionST($1,$2);}
+Dicionario: LinhaDic LinhasDic '.'                                          {dictionary=unionST($1,$2);}
           ;
-LinhasDic:                                                          {$$=NULL;}
-         | ';' LinhaDic LinhasDic                                   {$$=unionST($2,$3);}
+LinhasDic: %empty                                                           {$$=NULL;}
+         | ';' LinhaDic LinhasDic                                           {$$=unionST($2,$3);}
          ;
-LinhaDic: Palavra ':' Significado ':' Palavra ':' '[' ListaSin ']'  {$$=createSingleTerm($1,$3,$5,$8);}
+LinhaDic: Palavra ':' Significado ':' Palavra ':' '[' Sinonimos             {$$=createSingleTerm($1,$3,$5,$8);}
         ;
-ListaSin:                                                           {$$=NULL;}
-        | Palavra ',' ListaSin                                      {$$=createSin($1,$3);}
+Sinonimos: ']'                                                              {$$=NULL;}
+         | Palavra ListaSin ']'                                             {$$=createSin($1,$2);}
+         ;
+ListaSin: %empty                                                            {$$=NULL;}
+        | ',' Palavra ListaSin                                              {$$=createSin($2,$3);}
         ;
-Palavra: pal                                                        {$$=$1;}
+Palavra: pal                                                                {$$=$1;}
        ;
-Significado: str
+Significado: str                                                            {$$=$1;}
            ;
 %%
 #include "lex.yy.c"
@@ -74,7 +77,7 @@ SingleTerm createSingleTerm(char *t, char *d, char *dE, Sinonym ss){
 }
 
 int yyerror(char *m){
-    printf("Erro Sintático %s\n", m);
+    printf("%s in line: %d\n", m, yylineno);
 }
 
 int main(){
