@@ -1,0 +1,25 @@
+Esta é uma lista de expressões usadas em cinema.
+
+Cena: é uma unidade de tempo e de espaço em que se desenrola uma parte do filme. É menor que a seqüência. Ao contrário do que ocorre nesta, não há elipses (v. seqüência) dentro de uma cena. Pode-se entender a cena também como a menor unidade fílmica com significado completo. Cena: é o conjunto de planos.(RODRIGUES, CHRIS. O cinema e a produção. Rio de Janeiro: Lamparina editora, 2007 p.26).
+
+Corte: pode ser encarado de duas formas. No plano cinematográfico, é literalmente o corte da película ou a interrupção do registro pela câmera. No plano fílmico, acontece um corte, quando há descontinuidade da imagem mostrada na tela, correspondendo a uma mudança de planos, possivelmente com enquadramento e angulação diferentes. O trabalho de montagem de um filme consiste em recortar as gravações e colar, em seguida, as partes selecionadas, em uma ordem determinada, dando ao filme sua versão definitiva.
+
+Elipse: no mundo do cinema a Elipse significa ação, diálogo ou acontecimento que não são mostrados entre um plano e outro. São pedaços da história que não são declarados através sons, textos ou imagens, mas que o espectador entende que aconteceu. Ex: Uma estudante sai da sua casa, eles não precisam mostrar o caminho que ela andou, a cena já corta pra ela dentro da escola. Mas o espectador entende que, pra ela estar lá, Houve um percurso.
+
+Enquadramento: é a ação de selecionar determinada porção do cenário para figurar na tela. Assim, a depender do enquadramento, uma paisagem pode aparecer com mais céu, mais árvores, mais água. Uma pessoa pode aparecer inteira na tela, ou pode-se optar por mostrar apenas seu rosto.
+
+Fotograma: é cada uma das imagens fotográficas estáticas captadas pelo equipamento de filmagem, as quais, projetadas em uma certa velocidade, produzem a ilusão de movimento aos olhos humanos. Para que haja o efeito de movimento, é necessário que as imagens sejam capturadas e, depois, exibidas à velocidade de 24 fotogramas por segundo. Isso acontece, porque nosso olho não é capaz de ver o que se passa dentro de um intervalo menor que a vigésima quarta parte de um segundo.
+
+Fade-in: é a gradativa aparição da imagem, a partir da tela escura, em oposição ao fade-out.
+
+Fade-out: é o gradativo escurecimento da imagem, até o preto total, em oposição ao fade-in. Esses recursos, usados juntos ou isolados, servem a diversos fins. Por exemplo, o par fade-out – fade-in é muito empregado, especialmente nos filmes estadunidenses clássicos, para demarcar a passagem de uma seqüência a outra.
+
+Fusão: consiste na passagem gradativa, com sobreposição, de uma imagem para outra. Assemelha-se ao fade-in e ao fade-out, mas estes mudam de uma imagem para o escuro ou vice-versa, enquanto a fusão ocorre entre duas imagens. Por exemplo, ao sobrepor a imagem de um homem à estátua de um leão, fazendo uso da fusão, pode-se sugerir uma característica do personagem, a depender do contexto: forte, bravo, violento, poderoso etc.
+
+Plano: o conceito de plano é um tanto amplo, e a palavra é utilizada de uma forma bem elástica. Uma definição útil é de que plano é o intervalo que há entre dois cortes. O plano é considerado a menor unidade fílmica. O plano costuma ser classificado de acordo com diversos critérios.
+
+Sequência: é um conjunto de cenas sem cortes que formam uma grande subdivisão da narrativa fílmica, com uma relativa unidade interna. Um filme convencional é formado por algumas poucas seqüências, cada uma compreendendo uma etapa mais ou menos separada das outras pelos acontecimentos que desenvolve. Dentro de uma seqüência, pode haver lacunas de tempo, isto é, eventos que se supõe ocorrer, embora não sejam mostrados na tela. A isso, dá-se o nome de elipse.
+
+Tomada: é cada captura feita de uma determinada parte do filme, com o objetivo de se chegar àquela mais perfeita. A mesma parte pode ser encenada e registrada repetidas vezes, para que seja possível selecionar a melhor, a que será, enfim, utilizada na versão que vai às telas. Esse recurso pode ser apontado com um dos diferenciais existentes entre o cinema e o teatro, já que as cenas deste, embora possam ser ensaiadas à exaustão, não estão livres dos erros humanos, ao serem apresentadas ao público, ao contrário das cenas cinematográficas, que podem ser tratadas por técnicos competentes, a fim de eliminar erros de vários tipos.
+
+FONTE: https://pt.wikipedia.org/wiki/Terminologia_de_cinema
