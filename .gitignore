@@ -3,3 +3,6 @@
 **/*.output
 **/*.tab.c
 **/*.tab.h
+**/*.pdf
+**/*.log
+**/*.aux

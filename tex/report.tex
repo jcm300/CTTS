@@ -29,7 +29,9 @@ e-mail: \{a78821,a77049\}@alunos.uminho.pt
 \end{abstract}
 
 \section{Introdução}
-TODO: Falar da estrutura do relatorio
+Neste trabalho desenvolvemos um sistema que a partir de um dicionário de palavras cinematográficas realiza parse de certos textos sublinhando as palavras, colocando footnotes bem como um apêndice tendo em conta as palavras presentes no dicionário. Apesar de o trabalho ser vocacionado para um dicionário de palvras cinematográficas, o mesmo pode ser aplicado a palavras de todas as áreas estando o mesmo dependente do que pretende o utilizador.
+
+Em relação à estrutura do relatório, iremos inicialmente apresentar de uma forma mais profunda o problema a resolver, sendo logo de seguida demonstrado uma possível solução para o mesmo. É depois ilustrado vários exemplos de teste, sendo por fim concluído os resultados do trabalho.
 
 \section{Análise e especificação}
 
@@ -40,7 +42,7 @@ O sistema de tratamento de textos cinematográficos, CTTS, deve aceitar o fichei
 
 O objectivo do CTTS é ler o dicionário e carregá-lo para um estrutura interna de tal modo que depois possa processar os ditos textos. Para isso, deve procurar em cada um as palavras que estejam presentes no dicionário assinalando-as (sublinhado) e associando-lhes uma footnote com o termo em inglês. No fim do texto será gerado um apêndice com a lista de palavras encontradas e respectivos significados.
 
-\subsection{Especificação do Requisitos}
+\subsection{Especificação dos Requisitos}
 
 \section{Concepção/desenho da Resolução}
 
@@ -61,8 +63,34 @@ Significado -> str
 Portanto, a LinhaDic representa cada linha do dicionario, cada palavra bem como o seu significado, o termo em inglês e os seus sinónimos. Cada LinhaDic como em C é separada por um ``;'' sendo que a ultima linha deve terminar com um ``.'' e não um ponto e vírgula. Os parâmetros de uma linha são separados por ``:'' sendo que o primeiro é a palavra do qual queremos obter informação, o Significado é como o próprio nome diz o seu significado, a seguir temos o termo em inglês e por fim temos os sinónimos. Os sinónimos estão dentro de parenteses retos sendo divididos entre si por virgulas, como uma lista.
 
 \subsection{Estruturas}
+Visto existir a necessidade de processar vários textos com o dicionário, o mesmo deve ser guardado em memória. Para tal foram criadas as seguintes estruturas:
+\renewcommand{\labelitemi}{$\bullet$}
+\begin{itemize}
+\item Lista ligada que permite representar os sinónimos
+\begin{lstlisting}
+typedef struct sinonym {
+    char *sinonym;
+    struct sinonym *next;
+}*Sinonym;
+\end{lstlisting}
+\item Lista ligada que permite representar as linhas do dicionário
+\begin{lstlisting}
+typedef struct singleTerm{
+    char *term;
+    char *definition;
+    char *designationEN;
+    Sinonym sinonyms;
+    struct singleTerm *next;
+}*SingleTerm;
+\end{lstlisting}
+\end{itemize}
 
-\subsection{Algoritmos(Lógica)}
+\subsection{Parse dos ficheiros}
+Já temos a gramática do dicionário e a estrutura aonde guardar os dados do mesmo contudo falta-nos uma das partes mais importantes, realizar o parse dos ficheiros. Esta parte pode ser dividida em duas:
+\begin{itemize}
+\item Parse do ficheiro com o dicionário no qual durante o processo devem ser identificadas as diferentes partes da gramática, retornando o conteúdo (caso necessário) e o tipo para o Yacc. No Yacc consoante a parte da gramática em que estamos no momento é realizada certas ações, no nosso caso guardar os valores na estrutura já criada.
+\item Parse dos ficheiros com os textos, nos quais de acordo com se a palavra está ou não presente na estrutura, sublinhar, criar o footnote e no fim de processar o ficheiro criar um apêndice com as palavras identificadas e os seus significados.
+\end{itemize}
 
 \section{Codificação e Testes}
 
