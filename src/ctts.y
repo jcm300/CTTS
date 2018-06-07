@@ -33,22 +33,22 @@ SingleTerm createSingleTerm(char *, char *, char *, Sinonym );
 %type <sm> ListaSin Sinonimos
 %type <st> LinhasDic LinhaDic 
 %%
-Dicionario: LinhaDic LinhasDic '.'                                          {dictionary=unionST($1,$2);}
+Dicionario: LinhaDic LinhasDic '.'                                 {dictionary=unionST($1,$2);}
           ;
-LinhasDic: %empty                                                           {$$=NULL;}
-         | ';' LinhaDic LinhasDic                                           {$$=unionST($2,$3);}
+LinhasDic: %empty                                                  {$$=NULL;}
+         | ';' LinhaDic LinhasDic                                  {$$=unionST($2,$3);}
          ;
-LinhaDic: Palavra ':' Significado ':' Palavra ':' '[' Sinonimos             {$$=createSingleTerm($1,$3,$5,$8);}
+LinhaDic: Palavra ':' Significado ':' Palavra ':' '[' Sinonimos    {$$=createSingleTerm($1,$3,$5,$8);}
         ;
-Sinonimos: ']'                                                              {$$=NULL;}
-         | Palavra ListaSin ']'                                             {$$=createSin($1,$2);}
+Sinonimos: ']'                                                     {$$=NULL;}
+         | Palavra ListaSin ']'                                    {$$=createSin($1,$2);}
          ;
-ListaSin: %empty                                                            {$$=NULL;}
-        | ',' Palavra ListaSin                                              {$$=createSin($2,$3);}
+ListaSin: %empty                                                   {$$=NULL;}
+        | ',' Palavra ListaSin                                     {$$=createSin($2,$3);}
         ;
-Palavra: pal                                                                {$$=$1;}
+Palavra: pal                                                       {$$=$1;}
        ;
-Significado: str                                                            {$$=$1;}
+Significado: str                                                   {$$=$1;}
            ;
 %%
 #include "lex.yy.c"

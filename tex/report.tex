@@ -1,0 +1,85 @@
+\documentclass{llncs}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyvrb} 
+\usepackage[portuguese]{babel}
+\usepackage{ragged2e}
+\usepackage{listings}
+
+\def\changemargin#1#2{\list{}{\rightmargin#2\leftmargin#1}\item[]}
+\let\endchangemargin=\endlist
+
+\begin{document} \mainmatter
+\title{Cinematographic Text Treatment System}
+\titlerunning{Cinematographic Text Treatment System}
+\author{José Carlos Lima Martins A78821 \and
+        Miguel Miranda Quaresma A77049}
+\authorrunning{José Carlos Lima Martins A78821 \and
+        Miguel Miranda Quaresma A77049}
+\institute{                                                                
+University of Minho, Department of  Informatics, Braga, Portugal\\
+e-mail: \{a78821,a77049\}@alunos.uminho.pt
+}
+
+\maketitle
+
+\justify
+
+\begin{abstract}
+
+\end{abstract}
+
+\section{Introdução}
+TODO: Falar da estrutura do relatorio
+
+\section{Análise e especificação}
+
+\subsection{Descrição informal do problema}
+No âmbito da realização de filmes, pretende-se criar um Dicionário de palavras utilizadas nesta área. Associado a cada palavra pretende-se ter: o significado; a designação comum em inglês; e uma lista de sinónimos.
+
+O sistema de tratamento de textos cinematográficos, CTTS, deve aceitar o ficheiro onde está o dicionário (usando a linguagem por nós definida) e uma lista de ficheiros onde se encontram textos a anotar.
+
+O objectivo do CTTS é ler o dicionário e carregá-lo para um estrutura interna de tal modo que depois possa processar os ditos textos. Para isso, deve procurar em cada um as palavras que estejam presentes no dicionário assinalando-as (sublinhado) e associando-lhes uma footnote com o termo em inglês. No fim do texto será gerado um apêndice com a lista de palavras encontradas e respectivos significados.
+
+\subsection{Especificação do Requisitos}
+
+\section{Concepção/desenho da Resolução}
+
+\subsection{Gramática do Dicionário}
+De modo a o utilizador definir um dicionário foi criada uma linguagem que permite associar cada palavra ao seu significado, o termo em inglês e os seus sinónimos. Sendo assim o desenho da mesma é:
+\begin{lstlisting}[mathescape]
+Dicionario -> LinhaDic LinhasDic '.' 
+LinhasDic -> $\epsilon$ 
+          | ';' LinhaDic LinhasDic 
+LinhaDic -> Palavra ':' Significado ':' Palavra ':' '[' Sinonimos 
+Sinonimos -> ']' 
+          | Palavra ListaSin ']' 
+ListaSin -> $\epsilon$ 
+         | ',' Palavra ListaSin 
+Palavra -> pal 
+Significado -> str 
+\end{lstlisting}
+Portanto, a LinhaDic representa cada linha do dicionario, cada palavra bem como o seu significado, o termo em inglês e os seus sinónimos. Cada LinhaDic como em C é separada por um ``;'' sendo que a ultima linha deve terminar com um ``.'' e não um ponto e vírgula. Os parâmetros de uma linha são separados por ``:'' sendo que o primeiro é a palavra do qual queremos obter informação, o Significado é como o próprio nome diz o seu significado, a seguir temos o termo em inglês e por fim temos os sinónimos. Os sinónimos estão dentro de parenteses retos sendo divididos entre si por virgulas, como uma lista.
+
+\subsection{Estruturas}
+
+\subsection{Algoritmos(Lógica)}
+
+\section{Codificação e Testes}
+
+\section{Conclusão}
+
+\appendix
+\section{Código do Flex}
+\small
+\begin{changemargin}{-4cm}{-4cm}
+\lstinputlisting[language=C, showstringspaces=false, breaklines]{../src/ctts.l}
+\end{changemargin}
+
+\normalsize
+\section{Código do Yacc}
+\small
+\begin{changemargin}{-4cm}{-4cm}
+\lstinputlisting[language=C, showstringspaces=false, breaklines]{../src/ctts.y}
+\end{changemargin}
+
+\end{document}
