@@ -80,7 +80,40 @@ int yyerror(char *m){
     printf("%s in line: %d\n", m, yylineno);
 }
 
-int main(){
-    yyparse();
+int main(int argc, char **argv){
+    
+    if(argc>2){
+        yyin = fopen(argv[1],"r");
+        if(yyin){
+            parseDict(); //BEGIN DICT on flex
+            yyparse();
+            fclose(yyin);
+        
+            //yynerrs is the total of syntax errors finded by yacc
+            if(yynerrs==0){
+                parseFiles(); //BEGIN FILES on flex
+                for(int i=2; i<argc; i++){
+                    yyin = fopen(argv[i],"r");
+                    if(yyin){
+                        yyout = fopen(".aux","w");
+                        yylex();
+                        fclose(yyin);
+                        fclose(yyout);
+                        remove(argv[i]);
+                        rename(".aux",argv[i]);
+                    }else{
+                        printf("File %s doesn't exists. The other files that exists will be parsed.\n",argv[i]);
+                    }   
+                }
+            }else{
+                printf("Files not parsed. Fix the bugs on your dictionary file.\n");
+            }
+        }else{
+            printf("Dictionary file doesn't exists.\n");
+        }   
+    }else{
+        printf("Few arguments.\n");
+    }
+
     return 0;
 }
