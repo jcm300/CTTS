@@ -36,7 +36,7 @@ SingleTerm createSingleTerm(char *, char *, char *, Sinonym );
 %%
 Dicionario: LinhaDic LinhasDic '.'                                 {dictionary=unionST($1,$2);}
           ;
-LinhasDic:                                                         {$$=NULL;}
+LinhasDic: %empty                                                  {$$=NULL;}
          | ';' LinhaDic LinhasDic                                  {$$=unionST($2,$3);}
          ;
 LinhaDic: Palavra ':' Significado ':' Palavra ':' '[' Sinonimos    {$$=createSingleTerm($1,$3,$5,$8);}
@@ -44,7 +44,7 @@ LinhaDic: Palavra ':' Significado ':' Palavra ':' '[' Sinonimos    {$$=createSin
 Sinonimos: ']'                                                     {$$=NULL;}
          | Palavra ListaSin ']'                                    {$$=createSin($1,$2);}
          ;
-ListaSin:                                                          {$$=NULL;}
+ListaSin: %empty                                                   {$$=NULL;}
         | ',' Palavra ListaSin                                     {$$=createSin($2,$3);}
         ;
 Palavra: pal                                                       {$$=$1;}
@@ -88,12 +88,13 @@ char *searchTerm(char *term){
             termEN=dictAux->designationEN;
         sinAux=dictAux->sinonyms;
         while(sinAux && !termEN){
-            if(strcmp(sinAux->sinonym,term))
+            if(!strcmp(sinAux->sinonym,term))
                 termEN=dictAux->designationEN;
             sinAux=sinAux->next;
         }
         dictAux=dictAux->next;
     }
+    if(termEN) dictAux->refCount ++;
 
     return termEN;
 }
@@ -126,28 +127,48 @@ int yyerror(char *m){
     printf("%s in line: %d\n", m, yylineno);
 }
 
-//TODO: allow the user to specify whether it wants to overwrite the file being parsed
+
 int main(int argc, char **argv){
+    char outfile[100];
+
     if(argc>2){
         yyin = fopen(argv[1],"r");
         if(yyin){
             parseDict();        //BEGIN DICT on flex
             yyparse();
             fclose(yyin);
-            
+
             if(yynerrs==0){     //check if any syntax where found by yacc
                 parseFiles();   //BEGIN FILES on flex
-                for(int i=2; i<argc; i++){
+                for(int i=2; i<argc; i++){ 
                     yyin = fopen(argv[i],"r");
                     if(yyin){
-                        yyout = fopen(".aux","w");
+                        outfile[0]=0;
+                        strcat(outfile,argv[i]);
+
+                        if(i+1<argc && argv[i+1][0]=='-'){        //found a flag
+                            i++; 
+                            switch(argv[i][1]){
+                                case 'o':
+                                    i ++;
+                                    if(i<argc){
+                                        outfile[0]=0;
+                                        strcat(outfile,argv[i]);
+                                    }else fprintf(stderr,"The -o flag requires an extra argument, please check the manual for usage\nWriting to the default output...\n");
+                                    break;
+                                default:
+                                    fprintf(stderr,"%s is not a valid flag, please check the manual for usage\n", argv[i]);
+                                    break;
+                            }
+                        }
+
+                        strcat(outfile,".tex");
+                        yyout = fopen(outfile,"w");
                         beginLatex(yyout);
                         yylex();
                         makeAppendix(yyout);
                         fclose(yyin);
                         fclose(yyout);
-                        remove(argv[i]);
-                        rename(".aux",argv[i]);
                     }else{
                         fprintf(stderr,"File %s was not found. Parsing will resume.\n",argv[i]);
                     }   

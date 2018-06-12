@@ -18,6 +18,7 @@
 <FILES>{
 [A-Za-z]+       {if((match=searchTerm(yytext)))
                     underlineAnnotate(yytext,match);          
+                 else fprintf(yyout,"%s",yytext);
                 }
 }
 %%
