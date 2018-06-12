@@ -16,10 +16,9 @@
 }
 
 <FILES>{
-\w+             {if((match=searchTerm(yytext)))
+[A-Za-z]+       {if((match=searchTerm(yytext)))
                     underlineAnnotate(yytext,match);          
                 }
-.|\n            {;}
 }
 %%
 
@@ -32,5 +31,5 @@ void parseFiles(){
 }
 
 void underlineAnnotate(char *termPT, char *termEN){
-    printf("\\underline{%s}\\footnote{%s}",termPT,termEN);
+    fprintf(yyout,"\\underline{%s}\\footnote{%s}",termPT,termEN);
 }
