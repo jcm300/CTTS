@@ -1,5 +1,6 @@
 %{
 #include <stdlib.h>
+#include <ctype.h>
 typedef struct sinonym {
     char *sinonym;
     struct sinonym *next;
@@ -36,7 +37,7 @@ SingleTerm createSingleTerm(char *, char *, char *, Sinonym );
 %%
 Dicionario: LinhaDic LinhasDic '.'                                 {dictionary=unionST($1,$2);}
           ;
-LinhasDic: %empty                                                  {$$=NULL;}
+LinhasDic:                                                         {$$=NULL;}
          | ';' LinhaDic LinhasDic                                  {$$=unionST($2,$3);}
          ;
 LinhaDic: Palavra ':' Significado ':' Palavra ':' '[' Sinonimos    {$$=createSingleTerm($1,$3,$5,$8);}
@@ -44,7 +45,7 @@ LinhaDic: Palavra ':' Significado ':' Palavra ':' '[' Sinonimos    {$$=createSin
 Sinonimos: ']'                                                     {$$=NULL;}
          | Palavra ListaSin ']'                                    {$$=createSin($1,$2);}
          ;
-ListaSin: %empty                                                   {$$=NULL;}
+ListaSin:                                                          {$$=NULL;}
         | ',' Palavra ListaSin                                     {$$=createSin($2,$3);}
         ;
 Palavra: pal                                                       {$$=$1;}
@@ -78,17 +79,35 @@ SingleTerm createSingleTerm(char *t, char *d, char *dE, Sinonym ss){
     return aux;
 }
 
+int strcmpCInsensitive(char *s1, char *s2){
+    int i=0, eq=1;
+
+    while(s1[i] && s2[i] && eq){
+        if(isupper(s1[i])){
+            if(isupper(s2[i])) eq = s1[i]==s2[i];
+            else eq = tolower(s1[i])==s2[i];
+        }else{
+            if(isupper(s2[i])) eq = s1[i]==tolower(s2[i]);
+            else eq = s1[i]==s2[i];
+        }
+        i++;
+    }
+    if(s1 || s2) return 1;
+    else if(eq) return 0;
+         else return 1;
+}
+
 char *searchTerm(char *term){
     SingleTerm dictAux=dictionary;  
     Sinonym sinAux=NULL;
     char *termEN=NULL;
 
     while(dictAux && !termEN){ 
-        if(!strcmp(dictAux->term,term))
+        if(!strcmpCInsensitive(dictAux->term,term))
             termEN=dictAux->designationEN;
         sinAux=dictAux->sinonyms;
         while(sinAux && !termEN){
-            if(!strcmp(sinAux->sinonym,term))
+            if(!strcmpCInsensitive(sinAux->sinonym,term))
                 termEN=dictAux->designationEN;
             sinAux=sinAux->next;
         }
@@ -128,6 +147,26 @@ int yyerror(char *m){
     printf("%s in line: %d\n", m, yylineno);
 }
 
+int getOutputFileName(char outfile[],int argc, char **argv, int i){
+    if(i+1<argc && argv[i+1][0]=='-'){        //found a flag
+        i++; 
+        switch(argv[i][1]){
+            case 'o':
+                i ++;
+                if(i<argc){
+                    outfile[0]=0;
+                    strcat(outfile,argv[i]);
+                }else fprintf(stderr,"The -o flag requires an extra argument, please check the manual for usage\nWriting to the default output...\n");
+                break;
+            default:
+                fprintf(stderr,"%s is not a valid flag, please check the manual for usage\n", argv[i]);
+                break;
+        }
+    }
+    return i;
+}
+
+
 
 int main(int argc, char **argv){
     char outfile[100];
@@ -146,23 +185,7 @@ int main(int argc, char **argv){
                     if(yyin){
                         outfile[0]=0;
                         strcat(outfile,argv[i]);
-
-                        if(i+1<argc && argv[i+1][0]=='-'){        //found a flag
-                            i++; 
-                            switch(argv[i][1]){
-                                case 'o':
-                                    i ++;
-                                    if(i<argc){
-                                        outfile[0]=0;
-                                        strcat(outfile,argv[i]);
-                                    }else fprintf(stderr,"The -o flag requires an extra argument, please check the manual for usage\nWriting to the default output...\n");
-                                    break;
-                                default:
-                                    fprintf(stderr,"%s is not a valid flag, please check the manual for usage\n", argv[i]);
-                                    break;
-                            }
-                        }
-
+                        i=getOutputFileName(outfile,argc,argv,i); 
                         strcat(outfile,".tex");
                         yyout = fopen(outfile,"w");
                         beginLatex(yyout);
