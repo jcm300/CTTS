@@ -3,6 +3,8 @@
 %x DICT FILES
 %{
     char *match;
+    char *searchTerm(char*);
+    void underlineAnnotate(char*,char*);
 %}
 
 %%
@@ -14,10 +16,10 @@
 }
 
 <FILES>{
-\w+             {if((match=searchTerm(yytext[0])))
-                   underlineAnnotate(yytext[0],match);          
+\w+             {if((match=searchTerm(yytext)))
+                    underlineAnnotate(yytext,match);          
                 }
-.|\n
+.|\n            {;}
 }
 %%
 
@@ -30,5 +32,5 @@ void parseFiles(){
 }
 
 void underlineAnnotate(char *termPT, char *termEN){
-    printf("\\underline{%s}\\footnote{%s}",term,termEN);
+    printf("\\underline{%s}\\footnote{%s}",termPT,termEN);
 }

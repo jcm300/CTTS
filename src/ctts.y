@@ -7,7 +7,7 @@ typedef struct sinonym {
 
 typedef struct singleTerm{
     char *term;
-    char *definition;
+    char *definition; 
     char *designationEN;
     int refCount;
     Sinonym sinonyms;
@@ -36,7 +36,7 @@ SingleTerm createSingleTerm(char *, char *, char *, Sinonym );
 %%
 Dicionario: LinhaDic LinhasDic '.'                                 {dictionary=unionST($1,$2);}
           ;
-LinhasDic: %empty                                                  {$$=NULL;}
+LinhasDic:                                                         {$$=NULL;}
          | ';' LinhaDic LinhasDic                                  {$$=unionST($2,$3);}
          ;
 LinhaDic: Palavra ':' Significado ':' Palavra ':' '[' Sinonimos    {$$=createSingleTerm($1,$3,$5,$8);}
@@ -44,7 +44,7 @@ LinhaDic: Palavra ':' Significado ':' Palavra ':' '[' Sinonimos    {$$=createSin
 Sinonimos: ']'                                                     {$$=NULL;}
          | Palavra ListaSin ']'                                    {$$=createSin($1,$2);}
          ;
-ListaSin: %empty                                                   {$$=NULL;}
+ListaSin:                                                          {$$=NULL;}
         | ',' Palavra ListaSin                                     {$$=createSin($2,$3);}
         ;
 Palavra: pal                                                       {$$=$1;}
@@ -87,7 +87,7 @@ char *searchTerm(char *term){
         if(!strcmp(dictAux->term,term))
             termEN=dictAux->designationEN;
         sinAux=dictAux->sinonyms;
-        while(sinAux && !found){
+        while(sinAux && !termEN){
             if(strcmp(sinAux->sinonym,term))
                 termEN=dictAux->designationEN;
             sinAux=sinAux->next;
@@ -96,6 +96,30 @@ char *searchTerm(char *term){
     }
 
     return termEN;
+}
+
+void beginLatex(FILE *f){
+    fprintf(f,"\\documentclass{article}\n");
+    fprintf(f,"\\usepackage[bottom]{footmisc}\n");
+    fprintf(f,"\n\\begin{document}\n");
+}
+
+void makeAppendix(FILE *f){
+    SingleTerm aux = dictionary;
+    
+    fprintf(f,"\n\\appendix\n");
+    fprintf(f,"\\begin{itemize}\n");
+
+    while(aux){
+        if(aux->refCount>0){
+            fprintf(f,"\\item %s Def: %s\n",aux->term,aux->definition);
+            aux->refCount=0;
+        }
+        aux=aux->next;
+    }
+    
+    fprintf(f,"\\end{itemize}\n");
+    fprintf(f,"\n\\end{document}\n");
 }
 
 int yyerror(char *m){
@@ -117,7 +141,9 @@ int main(int argc, char **argv){
                     yyin = fopen(argv[i],"r");
                     if(yyin){
                         yyout = fopen(".aux","w");
+                        beginLatex(yyout);
                         yylex();
+                        makeAppendix(yyout);
                         fclose(yyin);
                         fclose(yyout);
                         remove(argv[i]);
