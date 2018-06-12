@@ -19,7 +19,8 @@ SingleTerm dictionary=NULL;
 SingleTerm unionST(SingleTerm , SingleTerm);
 Sinonym createSin(char *, Sinonym );
 SingleTerm createSingleTerm(char *, char *, char *, Sinonym );
-
+int yylex();
+int yyerror(char *m);
 %}
 %union{
     char *p;
