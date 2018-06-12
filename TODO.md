@@ -1,5 +1,5 @@
 # TODO
-- [ ] Finish report
+- [x] Finish report
 - [x] For each word check if it matches a dictionary word
 - [x] Underline words that match a dictionary word
 - [x] Add a footnote to the matching words
