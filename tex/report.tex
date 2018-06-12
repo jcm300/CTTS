@@ -32,16 +32,16 @@ e-mail: \{a78821,a77049\}@alunos.uminho.pt
 \section{Introdução}
 Neste trabalho desenvolvemos um sistema que a partir de um dicionário de palavras cinematográficas processa ficheiros de texto criando um ficheiro \LaTeX em que as palavras que estão presentes no dicionário e no texto são sublinhadas, sendo criadas footnotes bem como um apêndice com as definições das mesmas. Apesar de o trabalho ser vocacionado para um dicionário de palvras cinematográficas, o mesmo pode ser aplicado a palavras de todas as áreas estando apenas dependente do que pretende o utilizador.
 
-Em relação à estrutura do relatório, inicialmente será exposto, de uma forma aprofundada, o problema a resolver sendo, de seguida, demonstrada uma possível solução para o mesmo. São depois ilustrados vários exemplos de teste, finalizando com uma conclusão relativamente aos resultados do trabalho.
+Em relação à estrutura do relatório, inicialmente será exposto, de uma forma aprofundada, o problema a resolver sendo, de seguida, apresentada uma solução para o mesmo. São depois ilustrados vários exemplos de teste, finalizando com uma conclusão relativamente aos resultados do trabalho.
 
 \section{Análise e especificação}
 
 \subsection{Descrição informal do problema}
 No âmbito da realização de filmes, pretende-se criar um Dicionário de palavras utilizadas nesta área. Associado a cada palavra pretende-se ter: o significado; a designação comum em inglês; e uma lista de sinónimos.
 
-O sistema de tratamento de textos cinematográficos, CTTS, deve aceitar o ficheiro onde está o dicionário (usando a linguagem por nós definida) e uma lista de ficheiros onde se encontram textos a anotar.
+O sistema de tratamento de textos cinematográficos, \textbf{CTTS}, deve receber como argumento o nome do ficheiro onde está o dicionário(que respeite a linguagem/sintáxe por nós definida) e uma lista de ficheiros onde se encontram textos a anotar.
 
-O objectivo do CTTS é ler o dicionário e carregá-lo para um estrutura interna de tal modo que depois possa processar os ditos textos. Para isso, deve procurar em cada um as palavras que estejam presentes no dicionário assinalando-as (sublinhado) e associando-lhes uma footnote com o termo em inglês. No fim do texto será gerado um apêndice com a lista de palavras encontradas e respectivos significados.
+O objectivo do \textbf{CTTS} é ler o dicionário, armazenando-o numa estrutura interna de maneira a que possa processar os ditos textos. Para isso deve, para cada uma das palavras do texto que estejam presentes no dicionário, assinalá-las(sublinhando) e associando-lhes uma nota de rodapé(footnote) com o termo em inglês correspondente. No fim do texto será gerado um apêndice com a lista de palavras encontradas e respectivos significados.
 
 \subsection{Especificação dos Requisitos}
 O sistema desenvolvido deve permitir o uso de dicionários referentes a diversas áreas do conhecimento, não se restringindo apenas à área cinematográfica, algo que deve ser garantido através da gramática desenvolvida. Por outro lado, dado a quantidade de termos possíves o processamento do dicionário e subsequente consulta da estrutura usada para armazenar o mesmo devem ser realizados de maneira eficiente \textbf{i.e.} em tempo útil. A ferramente deve ainda permitir o processamento de diversos ficheiros de texto ao mesmo tempo gerando um ficheiro \LaTeX para cada um.
@@ -49,7 +49,8 @@ O sistema desenvolvido deve permitir o uso de dicionários referentes a diversas
 \section{Concepção/desenho da Resolução}
 
 \subsection{Gramática do Dicionário}
-De modo a o utilizador definir um dicionário foi criada uma linguagem que permite associar cada palavra ao seu significado, o termo em inglês e os seus sinónimos. Sendo assim o desenho da mesma é:
+Com o intuito de criar um formato para os dicionários que devem ser utilizados para consulta foi criada um gramática para os mesmos, gramática esta que permite associar cada palavra ao seu significado, o termo em inglês e os seus sinónimos. 
+A estrutura desta gramática é a seguinte:
 \begin{lstlisting}[mathescape]
 Dicionario -> LinhaDic LinhasDic '.' 
 LinhasDic -> $\epsilon$ 
@@ -62,10 +63,11 @@ ListaSin -> $\epsilon$
 Palavra -> pal 
 Significado -> str 
 \end{lstlisting}
-Portanto, a LinhaDic representa cada linha do dicionario, cada palavra bem como o seu significado, o termo em inglês e os seus sinónimos. Cada LinhaDic como em C é separada por um ``;'' sendo que a ultima linha deve terminar com um ``.'' e não um ponto e vírgula. Os parâmetros de uma linha são separados por ``:'' sendo que o primeiro é a palavra do qual queremos obter informação, o Significado é como o próprio nome diz o seu significado, a seguir temos o termo em inglês e por fim temos os sinónimos. Os sinónimos estão dentro de parenteses retos sendo divididos entre si por virgulas, como uma lista.
+
+Na gramática definida a \textbf{LinhaDic} representa uma linha individual no dicionario \textbf{i.e} cada palavra bem como o seu significado, o termo em inglês e os seus sinónimos. Cada LinhaDic (seguindo a sintaxe da linguagem de programação C) é separada pelo token ``;'' sendo que a última linha deve terminar com um ``.''. Os parâmetros de uma linha são separados por ``:'' sendo que o primeiro é a palavra da qual queremos obter informação, o Significado é, como o nome indica, o seu significado, seguido do termo em inglês e por fim uma lista de sinónimos. Os sinónimos estão dentro de parenteses retos sendo separados por virgulas, como uma lista.
 
 \subsection{Estruturas}
-Visto existir a necessidade de processar vários textos com o dicionário, o mesmo deve ser guardado em memória. Para tal foram criadas as seguintes estruturas:
+Por forma a permitir o processamento de vários textos com um dicionário é necessário guardar o mesmo em memória. Para tal foram criadas as seguintes estruturas:
 \renewcommand{\labelitemi}{$\bullet$}
 \begin{itemize}
 \item Lista ligada que permite representar os sinónimos
@@ -87,17 +89,45 @@ typedef struct singleTerm{
 }*SingleTerm;
 \end{lstlisting}
 \end{itemize}
-A inserção da variável refCount na estrutura deve-se ao facto de permitir saber ao fim de processar cada texto que palavras foram encontradas sendo que, após criado o apêndice, esse valor volta a ser colocado a 0. Este valor para futuras implementações pode ser usado para saber quantos ``matches'' houve para cada palavra do dicionário.
+
+A inserção da variável \texttt{refCount} na estrutura permite saber, findo o processamento de cada texto, que palavras foram encontradas no texto, sendo que, após criado o apêndice, esse valor volta a ser colocado a 0. Este valor pode, em futuras implementações, ser usado para saber quantos ``matches''(referências) houve para cada palavra do dicionário.
 
 \subsection{Parse dos ficheiros}
-Já temos a gramática do dicionário e a estrutura usada para guardar os dados do mesmo contudo falta-nos uma das partes mais importantes, realizar o parse dos ficheiros. Esta fase pode ser dividida em duas:
+Com a gramática do dicionário desenvolvida bem como a estrutura usada para guardar os dados do mesmo falta implementar uma das partes mais importantes do projeto, realizar o parse dos ficheiros. Esta fase pode ser dividida em duas:
 \begin{itemize}
-\item Parse do ficheiro com o dicionário no qual durante o processo devem ser identificadas as diferentes partes da gramática, retornando o conteúdo (caso necessário) e o tipo para o Yacc. No Yacc consoante a parte da gramática em que estamos no momento é realizada certas ações, no nosso caso guardar os valores na estrutura já criada.
-\item Parse dos ficheiros com os textos, nos quais de acordo com se a palavra está ou não presente na estrutura, sublinhar, criar o footnote e no fim de processar o ficheiro criar um apêndice com as palavras identificadas e os seus significados.
+\item Parse do ficheiro com o dicionário, processo durante o qual devem ser identificadas as diferentes partes da gramática, retornando o conteúdo (caso necessário) e o tipo para o Yacc. No Yacc, consoante a parte da gramática encontrada são realizadas certas ações nomeadamente guardar os valores na estrutura anteriomente refeirda.
+\item Parse dos ficheiros com os textos, sublinhando e criando notas de rodapé para as palavras que sejam comuns ao dicionário e ao texto, criando ainda um apêndice com as palavras encontradas e respetivos significados.
 \end{itemize}
 
-
 \subsection{Underline e footnote}
+Para cada palavra presente nos ficheiros processados, a ferramente realiza uma consulta da estrutura onde foi armazenado o dicionário e, caso seja encontrado o termo em causa, a palavra é sublinhada no ficheiro de output, sendo ainda criada uma nota de rodapé com a sua homóloga em inglês: 
+\begin{verbatim}
+    if((match=searchTerm(yytext)))
+        underlineAnnotate(yytext,match);          
+    else fprintf(yyout,"%s",yytext);
+
+    ...
+
+    void underlineAnnotate(char *termPT, char *termEN){
+        fprintf(yyout,"\\underline{%s}\\footnote{%s}",termPT,termEN);
+    }
+\end{verbatim}
+
+De realçar que a ferramenta reconhece palavras que estejam identificadas como sinónimos de um outro termo, permitindo obter um comportamento mais versátil da mesma(ferramenta): 
+\begin{verbatim}
+    while(dictAux && !termEN){ 
+        if(!strcmpCInsensitive(dictAux->term,term))
+            termEN=dictAux->designationEN;
+        sinAux=dictAux->sinonyms;
+        while(sinAux && !termEN){
+            if(!strcmpCInsensitive(sinAux->sinonym,term))
+            termEN=dictAux->designationEN;
+            sinAux=sinAux->next;
+        }
+        dictAux=dictAux->next;
+    }
+\end{verbatim}
+
 
 \subsection{Funcionalidades Adicionais}
 Por forma a aumentar a utilidade da ferramente desenvolvida foram implementadas algumas funcionalidades adicionais, nomeadamente:
