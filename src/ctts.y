@@ -80,18 +80,17 @@ int yyerror(char *m){
     printf("%s in line: %d\n", m, yylineno);
 }
 
+//TODO: allow the user to specify whether it wants to overwrite the file being parsed
 int main(int argc, char **argv){
-    
     if(argc>2){
         yyin = fopen(argv[1],"r");
         if(yyin){
-            parseDict(); //BEGIN DICT on flex
+            parseDict();        //BEGIN DICT on flex
             yyparse();
             fclose(yyin);
-        
-            //yynerrs is the total of syntax errors finded by yacc
-            if(yynerrs==0){
-                parseFiles(); //BEGIN FILES on flex
+            
+            if(yynerrs==0){     //check if any syntax where found by yacc
+                parseFiles();   //BEGIN FILES on flex
                 for(int i=2; i<argc; i++){
                     yyin = fopen(argv[i],"r");
                     if(yyin){
@@ -102,17 +101,17 @@ int main(int argc, char **argv){
                         remove(argv[i]);
                         rename(".aux",argv[i]);
                     }else{
-                        printf("File %s doesn't exists. The other files that exists will be parsed.\n",argv[i]);
+                        fprintf(stderr,"File %s was not found. Parsing will resume.\n",argv[i]);
                     }   
                 }
             }else{
-                printf("Files not parsed. Fix the bugs on your dictionary file.\n");
+                fprintf(stderr,"Files not parsed. Fix the bugs on your dictionary file.\n");
             }
         }else{
-            printf("Dictionary file doesn't exists.\n");
+            fprintf(stderr,"Dictionary file doesn't exist.\n");
         }   
     }else{
-        printf("Few arguments.\n");
+        fprintf(stderr,"Few arguments.\n");
     }
 
     return 0;
