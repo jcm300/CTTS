@@ -96,7 +96,27 @@ Já temos a gramática do dicionário e a estrutura aonde guardar os dados do me
 
 \subsection{Underline e footnote}
 
-\subsetion{Apêndice}
+\subsection{Apêndice}
+Como já descrito anteriormente a partir da variável refCount da estrutura SingleTerm é possível saber se a palavra foi ou não encontrada no texto. Sendo assim basta verificar esse valor e caso seja maior que 0 imprime-se um item de uma lista com o nome do termo e a definição:
+\begin{verbatim}
+while(aux){
+    if(aux->refCount>0){
+        fprintf(f,"\\item %s Def: %s\n",aux->term,aux->definition);
+        aux->refCount=0;
+    }
+    aux=aux->next;
+}
+\end{verbatim}
+Contudo é antes disto imprimido para o ficheiro a indicação de iniciação do apêndice e a abertura da lista:
+\begin{verbatim}
+fprintf(f,"\n\\appendix\n");
+fprintf(f,"\\begin{itemize}\n");
+\end{verbatim}
+No fim de gerar todos os elementos da lista, fecha-se a lista bem como o documento:
+\begin{verbatim}
+fprintf(f,"\\end{itemize}\n");
+fprintf(f,"\n\\end{document}\n");
+\end{verbatim}
 
 \section{Codificação e Testes}
 Foi criado uma Makefile de modo a compilar o código sendo que a ideia base é:
@@ -107,7 +127,7 @@ Foi criado uma Makefile de modo a compilar o código sendo que a ideia base é:
 \end{itemize}
 
 O executável pode ser usado de formas diferentes dependendo de como é chamado e que flags são passadas:
-\begin{itemze}
+\begin{itemize}
 
 \end{itemize}
 
