@@ -1,3 +1,7 @@
+## macOS
+**/._*
+**/.DS_Store
+
 **/*.out
 **/*.yy.c
 **/*.output
