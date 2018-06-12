@@ -36,7 +36,7 @@ SingleTerm createSingleTerm(char *, char *, char *, Sinonym );
 %%
 Dicionario: LinhaDic LinhasDic '.'                                 {dictionary=unionST($1,$2);}
           ;
-LinhasDic: %empty                                                  {$$=NULL;}
+LinhasDic:                                                         {$$=NULL;}
          | ';' LinhaDic LinhasDic                                  {$$=unionST($2,$3);}
          ;
 LinhaDic: Palavra ':' Significado ':' Palavra ':' '[' Sinonimos    {$$=createSingleTerm($1,$3,$5,$8);}
@@ -44,7 +44,7 @@ LinhaDic: Palavra ':' Significado ':' Palavra ':' '[' Sinonimos    {$$=createSin
 Sinonimos: ']'                                                     {$$=NULL;}
          | Palavra ListaSin ']'                                    {$$=createSin($1,$2);}
          ;
-ListaSin: %empty                                                   {$$=NULL;}
+ListaSin:                                                          {$$=NULL;}
         | ',' Palavra ListaSin                                     {$$=createSin($2,$3);}
         ;
 Palavra: pal                                                       {$$=$1;}
@@ -127,6 +127,26 @@ int yyerror(char *m){
     printf("%s in line: %d\n", m, yylineno);
 }
 
+int getOutputFileName(char outfile[],int argc, char **argv, int i){
+    if(i+1<argc && argv[i+1][0]=='-'){        //found a flag
+        i++; 
+        switch(argv[i][1]){
+            case 'o':
+                i ++;
+                if(i<argc){
+                    outfile[0]=0;
+                    strcat(outfile,argv[i]);
+                }else fprintf(stderr,"The -o flag requires an extra argument, please check the manual for usage\nWriting to the default output...\n");
+                break;
+            default:
+                fprintf(stderr,"%s is not a valid flag, please check the manual for usage\n", argv[i]);
+                break;
+        }
+    }
+    return i;
+}
+
+
 
 int main(int argc, char **argv){
     char outfile[100];
@@ -145,23 +165,7 @@ int main(int argc, char **argv){
                     if(yyin){
                         outfile[0]=0;
                         strcat(outfile,argv[i]);
-
-                        if(i+1<argc && argv[i+1][0]=='-'){        //found a flag
-                            i++; 
-                            switch(argv[i][1]){
-                                case 'o':
-                                    i ++;
-                                    if(i<argc){
-                                        outfile[0]=0;
-                                        strcat(outfile,argv[i]);
-                                    }else fprintf(stderr,"The -o flag requires an extra argument, please check the manual for usage\nWriting to the default output...\n");
-                                    break;
-                                default:
-                                    fprintf(stderr,"%s is not a valid flag, please check the manual for usage\n", argv[i]);
-                                    break;
-                            }
-                        }
-
+                        i=getOutputFileName(outfile,argc,argv,i); 
                         strcat(outfile,".tex");
                         yyout = fopen(outfile,"w");
                         beginLatex(yyout);
