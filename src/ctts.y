@@ -83,19 +83,10 @@ SingleTerm createSingleTerm(char *t, char *d, char *dE, Sinonym ss){
 int strcmpCInsensitive(char *s1, char *s2){
     int i=0, eq=1;
 
-    while(s1[i] && s2[i] && eq){
-        if(isupper(s1[i])){
-            if(isupper(s2[i])) eq = s1[i]==s2[i];
-            else eq = tolower(s1[i])==s2[i];
-        }else{
-            if(isupper(s2[i])) eq = s1[i]==tolower(s2[i]);
-            else eq = s1[i]==s2[i];
-        }
+    while(s1[i] && s2[i] && (eq=(tolower(s1[i])==tolower(s2[i]))))
         i++;
-    }
-    if(s1 || s2) return 1;
-    else if(eq) return 0;
-         else return 1;
+    
+    return (s1[i] || s2[i]) || !eq;
 }
 
 char *searchTerm(char *term){
