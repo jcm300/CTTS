@@ -107,9 +107,10 @@ while(aux){
     aux=aux->next;
 }
 \end{verbatim}
-Contudo é antes disto imprimido para o ficheiro a indicação de iniciação do apêndice e a abertura da lista:
+Contudo é antes disto imprimido para o ficheiro a indicação de iniciação do apêndice, criada uma secção Apendice e a abertura da lista:
 \begin{verbatim}
 fprintf(f,"\n\\appendix\n");
+fprintf(f,"\\section{Apendice}\n");
 fprintf(f,"\\begin{itemize}\n");
 \end{verbatim}
 No fim de gerar todos os elementos da lista, fecha-se a lista bem como o documento:
@@ -128,12 +129,12 @@ Foi criado uma Makefile de modo a compilar o código sendo que a ideia base é:
 
 O executável pode ser usado de formas diferentes dependendo de como é chamado e que flags são passadas:
 \begin{itemize}
-
+    \item
 \end{itemize}
 
 Alguns dos testes realizados foram:
 \begin{itemize}
-
+    \item
 \end{itemize}
 
 \section{Conclusão}

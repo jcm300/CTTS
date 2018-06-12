@@ -109,11 +109,12 @@ void makeAppendix(FILE *f){
     SingleTerm aux = dictionary;
     
     fprintf(f,"\n\\appendix\n");
+    fprintf(f,"\\section{Apendice}\n"); 
     fprintf(f,"\\begin{itemize}\n");
 
     while(aux){
         if(aux->refCount>0){
-            fprintf(f,"\\item %s Def: %s\n",aux->term,aux->definition);
+            fprintf(f,"\\item %s $\\to$ Def: %s\n",aux->term,aux->definition);
             aux->refCount=0;
         }
         aux=aux->next;
