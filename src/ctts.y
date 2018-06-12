@@ -76,6 +76,30 @@ SingleTerm createSingleTerm(char *t, char *d, char *dE, Sinonym ss){
     return aux;
 }
 
+void beginLatex(FILE *f){
+    fprintf(f,"\documentclass{article}\n");
+    fprintf(f,"\usepackage[bottom]{footmisc}\n");
+    fiprintf(f,"\n\begin{document}\n");
+}
+
+void makeAppendix(FILE *f){
+    SingleTerm aux = dictionary;
+    
+    fprintf(f,"\n\appendix\n");
+    fprintf(f,"\begin{itemize}\n")
+
+    while(aux){
+        if(aux->refCount>0){
+            fprintf(f,"\item %s Def: %s\n",aux->term,aux->definition);
+            aux->refCount=0;
+        }
+        aux=aux->next;
+    }
+    
+    fprintf(f,"\end{itemize}\n");
+    fprintf(f,"\n\end{document}\n");
+}
+
 int yyerror(char *m){
     printf("%s in line: %d\n", m, yylineno);
 }
@@ -95,7 +119,9 @@ int main(int argc, char **argv){
                     yyin = fopen(argv[i],"r");
                     if(yyin){
                         yyout = fopen(".aux","w");
+                        beginLatex(yyout);
                         yylex();
+                        makeAppendix(yyout);
                         fclose(yyin);
                         fclose(yyout);
                         remove(argv[i]);
