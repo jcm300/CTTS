@@ -142,8 +142,13 @@ O executável pode ser usado de formas diferentes dependendo de como é chamado 
 \begin{itemize}
     \item \verb|./ctts <FicheiroDicionario> <FicheiroARealizarParse1> <FicheiroArealizarParse2> ...|
     \item \verb|./ctts <FicheiroDicionario> <FicheiroARealizarParse> -o <NomeDeFicheiroDeSaida>|
+    \item 
+    \begin{verbatim}
+        ./ctts <FicheiroDicionario> <FicheiroARealizarParse1> -o <NomeDeFicheiroDeSaida1> 
+                                    <FicheiroARealizarParse2> -o <NomeDeFicheiroDeSaida2> ...
+    \end{verbatim}
 \end{itemize}
-É importante frisar que no primeiro caso os nomes dos ficheiros de output serão \verb|NomeDoFicheiroInput.tex| enquanto que no segundo caso será o \verb|NomeInseridoPeloUser.tex|.
+É importante frisar que no primeiro caso os nomes dos ficheiros de output serão \verb|NomeDoFicheiroInput.tex| enquanto que no segundo caso será o \verb|NomeInseridoPeloUser.tex|. No terceiro caso, será parecido ao segundo, ou seja o nome de saída de ``FicheiroARealizarParse1'' é \verb|NomeDeFicheiroDeSaida1.tex| e o nome de saída de ``FicheiroARealizarParse2 é \verb|NomeDeFicheiroDeSaida2.tex|.
 
 \subsection{Exemplo de teste}
 Comando executado: \verb|./ctts dict.txt tt.txt -o file|
@@ -171,7 +176,7 @@ Tornar-se um roteirista começa com o desenvolvimento do seu talento como escrit
 \end{spverbatim}
 
 \section{Conclusão}
-Em conclusão apesar do trabalho ser feito com o objetivo de palavras cinematográficas, pode-se contudo usar palavras de qualquer área. 
+Em conclusão apesar do trabalho ser feito com o objetivo de palavras cinematográficas, pode-se contudo usar palavras de qualquer área. Para além disso o processamento das palavras é case insencitive ou seja, identifica as palavras independentemente sejam maiusculas ou minusculas, apenas interessa o ``signficado''. É também permitido via flag decidir qual o nome de sáida de cada ficheiro. É, por fim, importante referir que as ferramentas usadas(Flex e Yacc) aliadas à linguagem de programação C, dão-nos um grande poder de decisão e de desenvolvimento em que a realização de aplicação torna-se mais rápida, mais simples e mais fácil de se construir.
 
 \appendix
 \section{Código do Flex}
