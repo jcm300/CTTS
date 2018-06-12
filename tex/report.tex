@@ -29,9 +29,9 @@ e-mail: \{a78821,a77049\}@alunos.uminho.pt
 \end{abstract}
 
 \section{Introdução}
-Neste trabalho desenvolvemos um sistema que a partir de um dicionário de palavras cinematográficas realiza parse de certos textos sublinhando as palavras, colocando footnotes bem como um apêndice tendo em conta as palavras presentes no dicionário. Apesar de o trabalho ser vocacionado para um dicionário de palvras cinematográficas, o mesmo pode ser aplicado a palavras de todas as áreas estando o mesmo dependente do que pretende o utilizador.
+Neste trabalho desenvolvemos um sistema que a partir de um dicionário de palavras cinematográficas processa ficheiros de texto criando um ficheiro \LaTeX em que as palavras que estão presentes no dicionário e no texto são sublinhadas, sendo criadas footnotes bem como um apêndice com as definições das mesmas. Apesar de o trabalho ser vocacionado para um dicionário de palvras cinematográficas, o mesmo pode ser aplicado a palavras de todas as áreas estando apenas dependente do que pretende o utilizador.
 
-Em relação à estrutura do relatório, iremos inicialmente apresentar de uma forma mais profunda o problema a resolver, sendo logo de seguida demonstrado uma possível solução para o mesmo. É depois ilustrado vários exemplos de teste, sendo por fim concluído os resultados do trabalho.
+Em relação à estrutura do relatório, inicialmente será exposto, de uma forma aprofundada, o problema a resolver sendo, de seguida, demonstrada uma possível solução para o mesmo. São depois ilustrados vários exemplos de teste, finalizando com uma conclusão relativamente aos resultados do trabalho.
 
 \section{Análise e especificação}
 
@@ -43,6 +43,7 @@ O sistema de tratamento de textos cinematográficos, CTTS, deve aceitar o fichei
 O objectivo do CTTS é ler o dicionário e carregá-lo para um estrutura interna de tal modo que depois possa processar os ditos textos. Para isso, deve procurar em cada um as palavras que estejam presentes no dicionário assinalando-as (sublinhado) e associando-lhes uma footnote com o termo em inglês. No fim do texto será gerado um apêndice com a lista de palavras encontradas e respectivos significados.
 
 \subsection{Especificação dos Requisitos}
+O sistema desenvolvido deve permitir o uso de dicionários referentes a diversas áreas do conhecimento, não se restringindo apenas à área cinematográfica, algo que deve ser garantido através da gramática desenvolvida. Por outro lado, dado a quantidade de termos possíves o processamento do dicionário e subsequente consulta da estrutura usada para armazenar o mesmo devem ser realizados de maneira eficiente \textbf{i.e.} em tempo útil. A ferramente deve ainda permitir o processamento de diversos ficheiros de texto ao mesmo tempo gerando um ficheiro \LaTeX para cada um.
 
 \section{Concepção/desenho da Resolução}
 
@@ -88,13 +89,22 @@ typedef struct singleTerm{
 A inserção da variável refCount na estrutura deve-se ao facto de permitir saber ao fim de processar cada texto que palavras foram encontradas sendo que, após criado o apêndice, esse valor volta a ser colocado a 0. Este valor para futuras implementações pode ser usado para saber quantos ``matches'' houve para cada palavra do dicionário.
 
 \subsection{Parse dos ficheiros}
-Já temos a gramática do dicionário e a estrutura aonde guardar os dados do mesmo contudo falta-nos uma das partes mais importantes, realizar o parse dos ficheiros. Esta parte pode ser dividida em duas:
+Já temos a gramática do dicionário e a estrutura usada para guardar os dados do mesmo contudo falta-nos uma das partes mais importantes, realizar o parse dos ficheiros. Esta fase pode ser dividida em duas:
 \begin{itemize}
 \item Parse do ficheiro com o dicionário no qual durante o processo devem ser identificadas as diferentes partes da gramática, retornando o conteúdo (caso necessário) e o tipo para o Yacc. No Yacc consoante a parte da gramática em que estamos no momento é realizada certas ações, no nosso caso guardar os valores na estrutura já criada.
 \item Parse dos ficheiros com os textos, nos quais de acordo com se a palavra está ou não presente na estrutura, sublinhar, criar o footnote e no fim de processar o ficheiro criar um apêndice com as palavras identificadas e os seus significados.
 \end{itemize}
 
+
 \subsection{Underline e footnote}
+
+\subsection{Funcionalidades Adicionais}
+Por forma a aumentar a utilidade da ferramente desenvolvida foram implementadas algumas funcionalidades adicionais, nomeadamente:
+\begin{itemize}
+    \item Possibilidade de escolher nome de ficheiro output para cada ficheiro de texto processado através da flag \textbf{-o}
+    \item Procura/comparação de termos sem ter em conta a grafia(maiúscula ou minúscula) de uma letra
+\end{itemize}
+
 
 \subsection{Apêndice}
 Como já descrito anteriormente a partir da variável refCount da estrutura SingleTerm é possível saber se a palavra foi ou não encontrada no texto. Sendo assim basta verificar esse valor e caso seja maior que 0 imprime-se um item de uma lista com o nome do termo e a definição:
