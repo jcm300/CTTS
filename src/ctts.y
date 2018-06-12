@@ -9,6 +9,7 @@ typedef struct singleTerm{
     char *term;
     char *definition;
     char *designationEN;
+    int refCount;
     Sinonym sinonyms;
     struct singleTerm *next;
 }*SingleTerm;
@@ -71,9 +72,30 @@ SingleTerm createSingleTerm(char *t, char *d, char *dE, Sinonym ss){
     aux->term = strdup(t);
     aux->definition = strdup(d);
     aux->designationEN = strdup(dE);
+    aux->refCount=0;
     aux->sinonyms = ss;
     aux->next=NULL;
     return aux;
+}
+
+char *searchTerm(char *term){
+    SingleTerm dictAux=dictionary;  
+    Sinonym sinAux=NULL;
+    char *termEN=NULL;
+
+    while(dictAux && !termEN){ 
+        if(!strcmp(dictAux->term,term))
+            termEN=dictAux->designationEN;
+        sinAux=dictAux->sinonyms;
+        while(sinAux && !found){
+            if(strcmp(sinAux->sinonym,term))
+                termEN=dictAux->designationEN;
+            sinAux=sinAux->next;
+        }
+        dictAux=dictAux->next;
+    }
+
+    return termEN;
 }
 
 int yyerror(char *m){

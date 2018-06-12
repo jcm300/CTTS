@@ -1,6 +1,9 @@
 %option noyywrap
 %option yylineno
 %x DICT FILES
+%{
+    char *match;
+%}
 
 %%
 <DICT>{
@@ -11,7 +14,10 @@
 }
 
 <FILES>{
-
+\w+             {if((match=searchTerm(yytext[0])))
+                   underlineAnnotate(yytext[0],match);          
+                }
+.|\n
 }
 %%
 
@@ -21,4 +27,8 @@ void parseDict(){
 
 void parseFiles(){
     BEGIN FILES;
+}
+
+void underlineAnnotate(char *termPT, char *termEN){
+    printf("\\underline{%s}\\footnote{%s}",term,termEN);
 }
