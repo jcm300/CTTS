@@ -26,11 +26,11 @@ e-mail: \{a78821,a77049\}@alunos.uminho.pt
 \justify
 
 \begin{abstract}
-    Neste documento são apresentada as várias decisões  no desenvolvimento de um parser Flex/Yacc que processe textos tendo em conta um dicionário que respeite a gramática construída. Este processamento de textos deve identificar palavras do texto que estão presentes no dicionário e sublinhá-las, adicionar um footnote e, no fim do texto, criar um apêndice com as palavras encontradas e o seu significado, convertendo o ficheiro inicial(do tipo \verb|.txt| por exemplo) num ficheiro \LaTeX(\verb|.tex|).
+    Neste documento são apresentadas as várias decisões  no desenvolvimento de um parser Flex/Yacc que processe textos tendo em conta um dicionário que respeite a gramática construída. Este processamento de textos deve identificar palavras do texto que estão presentes no dicionário e sublinhá-las, adicionar um footnote e, no fim do texto, criar um apêndice com as palavras encontradas e o seu significado, convertendo o ficheiro inicial(do tipo \verb|.txt| por exemplo) num ficheiro \LaTeX(\verb|.tex|).
 \end{abstract}
 
 \section{Introdução}
-Neste trabalho desenvolvemos um sistema que a partir de um dicionário de palavras cinematográficas processa ficheiros de texto criando um ficheiro \LaTeX em que as palavras que estão presentes no dicionário e no texto são sublinhadas, sendo criadas footnotes bem como um apêndice com as definições das mesmas. Apesar de o trabalho ser vocacionado para um dicionário de palavras cinematográficas, o mesmo pode ser aplicado a palavras de todas as áreas estando apenas dependente do que pretende o utilizador.
+Neste trabalho desenvolvemos um sistema que a partir de um dicionário de palavras cinematográficas processa ficheiros de texto criando um ficheiro \LaTeX{} em que as palavras que estão presentes no dicionário e no texto são sublinhadas, sendo criadas footnotes bem como um apêndice com as definições das mesmas. Apesar de o trabalho ser vocacionado para um dicionário de palavras cinematográficas, o mesmo pode ser aplicado a palavras de todas as áreas estando apenas dependente do que pretende o utilizador.
 
 Em relação à estrutura do relatório, inicialmente será exposto, de uma forma aprofundada, o problema a resolver sendo, de seguida, apresentada uma solução para o mesmo. São depois ilustrados vários exemplos de teste, finalizando com uma conclusão relativamente aos resultados do trabalho.
 
@@ -44,7 +44,7 @@ O sistema de tratamento de textos cinematográficos, \textbf{CTTS}, deve receber
 O objectivo do \textbf{CTTS} é ler o dicionário, armazenando-o numa estrutura interna de maneira a que possa processar os ditos textos. Para isso deve, para cada uma das palavras do texto que estejam presentes no dicionário, assinalá-las(sublinhando) e associando-lhes uma nota de rodapé(footnote) com o termo em inglês correspondente. No fim do texto será gerado um apêndice com a lista de palavras encontradas e respectivos significados.
 
 \subsection{Especificação dos Requisitos}
-O sistema desenvolvido deve permitir o uso de dicionários referentes a diversas áreas do conhecimento, não se restringindo apenas à área cinematográfica, algo que deve ser garantido através da gramática desenvolvida. Por outro lado, dado a quantidade de termos possíveis o processamento do dicionário e subsequente consulta da estrutura usada para armazenar o mesmo devem ser realizados de maneira eficiente \textbf{i.e.} em tempo útil. A ferramenta deve ainda permitir o processamento de diversos ficheiros de texto ao mesmo tempo gerando um ficheiro \LaTeX para cada um.
+O sistema desenvolvido deve permitir o uso de dicionários referentes a diversas áreas do conhecimento, não se restringindo apenas à área cinematográfica, algo que deve ser garantido através da gramática desenvolvida. Por outro lado, dado a quantidade de termos possíveis, o processamento do dicionário e subsequente consulta da estrutura usada para armazenar o mesmo devem ser realizados de maneira eficiente \textbf{i.e.} em tempo útil. A ferramenta deve ainda permitir o processamento de diversos ficheiros de texto ao mesmo tempo gerando um ficheiro \LaTeX{} para cada um.
 
 \section{Concepção/desenho da Resolução}
 
@@ -95,14 +95,14 @@ A inserção da variável \texttt{refCount} na estrutura permite saber, findo o 
 \subsection{Parse dos ficheiros}
 Com a gramática do dicionário desenvolvida bem como a estrutura usada para guardar os dados do mesmo falta implementar uma das partes mais importantes do projeto, realizar o parse dos ficheiros. Esta fase pode ser dividida em duas:
 \begin{itemize}
-\item Parse do ficheiro com o dicionário, processo durante o qual devem ser identificadas as diferentes partes da gramática, retornando o conteúdo (caso necessário) e o tipo para o Yacc. No Yacc, consoante a parte da gramática encontrada são realizadas certas ações nomeadamente guardar os valores na estrutura anteriomente refeirda.
+\item Parse do ficheiro com o dicionário, processo durante o qual devem ser identificadas as diferentes partes da gramática, retornando o conteúdo (caso necessário) e o tipo para o Yacc. No Yacc, consoante a parte da gramática encontrada são realizadas certas ações nomeadamente guardar os valores na estrutura anteriomente referida.
 \item Parse dos ficheiros com os textos, sublinhando e criando notas de rodapé para as palavras que sejam comuns ao dicionário e ao texto, criando ainda um apêndice com as palavras encontradas e respetivos significados.
 \end{itemize}
 
-É por causa disto que no ficheiro Flex existem duas condições de contexto, DICT e FILES. Antes de cada iniciação do Flex é chamado uma das funções parseDict ou parseFiles para que o Flex comece respetivamente dentro da condição de contexto DICT ou FILES. Sendo assim, dentro de cada condição é colocado as regras especificas para cada tipo de ficheiro(DICT-Dicionário e FILES-ficheiro a ``converter''), permitindo assim realizar o parse de vários ficheiros com estruturas diferentes como o mesmo ficheiro Flex.
+É por causa disto que no ficheiro Flex existem duas condições de contexto, DICT e FILES. Antes de cada iniciação do Flex é chamado uma das funções parseDict ou parseFiles para que o Flex comece respetivamente dentro da condição de contexto DICT ou FILES. Sendo assim, dentro de cada condição é colocado as regras especificas para cada tipo de ficheiro(DICT-Dicionário e FILES-ficheiro a ``converter''), permitindo assim realizar o parse de vários ficheiros com estruturas diferentes com o mesmo ficheiro Flex.
 
 \subsection{Underline e footnote}
-Para cada palavra presente nos ficheiros processados, a ferramente realiza uma consulta da estrutura onde foi armazenado o dicionário e, caso seja encontrado o termo em causa, a palavra é sublinhada no ficheiro de output, sendo ainda criada uma nota de rodapé com a sua homóloga em inglês: 
+Para cada palavra presente nos ficheiros processados, a ferramenta realiza uma consulta da estrutura onde foi armazenado o dicionário e, caso seja encontrado o termo em causa, a palavra é sublinhada no ficheiro de output, sendo ainda criada uma nota de rodapé com a sua homóloga em inglês: 
 \begin{verbatim}
     if((match=searchTerm(yytext)))
         underlineAnnotate(yytext,match);          
@@ -115,7 +115,7 @@ Para cada palavra presente nos ficheiros processados, a ferramente realiza uma c
     }
 \end{verbatim}
 
-De realçar que a ferramenta reconhece palavras que estejam identificadas como sinónimos de um outro termo, permitindo obter um comportamento mais versátil da mesma(ferramenta): 
+De realçar que a ferramenta reconhece palavras que estejam identificadas como sinónimos de um termo, permitindo obter um comportamento mais versátil da mesma(ferramenta): 
 \begin{verbatim}
     while(dictAux && !termEN){ 
         if(!strcmpCInsensitive(dictAux->term,term))
@@ -208,7 +208,7 @@ Tornar-se um roteirista começa com o desenvolvimento do seu talento como escrit
 \end{spverbatim}
 
 \section{Conclusão}
-Em conclusão apesar do trabalho ser feito com o objetivo de identificar palavras do domínio cinematográfico, permite o uso palavras de qualquer área. Para além disso o processamento das palavras é case insensitive ou seja, identifica as palavras sem fazer distinção entre letras idênticas ainda que com grafias distintas. É também permitido, com recurso a uma flag, decidir qual o nome de sáida de cada ficheiro. É, por fim, importante referir que as ferramentas usadas(Flex e Yacc) aliadas à linguagem de programação C, dão-nos um grande poder de decisão e de desenvolvimento, tornado a que o desenvolvimento da aplicação fosse efetuado de maneira mais rápida, simples e mais fácil de se construir.
+Em conclusão apesar do trabalho ser feito com o objetivo de identificar palavras do domínio cinematográfico, permite o uso palavras de qualquer área. Para além disso o processamento das palavras é case insensitive ou seja, identifica as palavras sem fazer distinção entre letras idênticas ainda que com grafias distintas. É também permitido, com recurso a uma flag, decidir qual o nome de saída de cada ficheiro. É, por fim, importante referir que as ferramentas usadas(Flex e Yacc) aliadas à linguagem de programação C, dão-nos um grande poder de decisão e de desenvolvimento, tornado a que o desenvolvimento da aplicação fosse efetuado de maneira mais rápida, simples e mais fácil de se construir.
 
 \appendix
 \section{Código do Flex}
