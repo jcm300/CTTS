@@ -79,11 +79,13 @@ typedef struct singleTerm{
     char *term;
     char *definition;
     char *designationEN;
+    int refCount;
     Sinonym sinonyms;
     struct singleTerm *next;
 }*SingleTerm;
 \end{lstlisting}
 \end{itemize}
+A inserção da variável refCount na estrutura deve-se ao facto de permitir saber ao fim de processar cada texto que palavras foram encontradas sendo que, após criado o apêndice, esse valor volta a ser colocado a 0. Este valor para futuras implementações pode ser usado para saber quantos ``matches'' houve para cada palavra do dicionário.
 
 \subsection{Parse dos ficheiros}
 Já temos a gramática do dicionário e a estrutura aonde guardar os dados do mesmo contudo falta-nos uma das partes mais importantes, realizar o parse dos ficheiros. Esta parte pode ser dividida em duas:
@@ -92,7 +94,27 @@ Já temos a gramática do dicionário e a estrutura aonde guardar os dados do me
 \item Parse dos ficheiros com os textos, nos quais de acordo com se a palavra está ou não presente na estrutura, sublinhar, criar o footnote e no fim de processar o ficheiro criar um apêndice com as palavras identificadas e os seus significados.
 \end{itemize}
 
+\subsection{Underline e footnote}
+
+\subsetion{Apêndice}
+
 \section{Codificação e Testes}
+Foi criado uma Makefile de modo a compilar o código sendo que a ideia base é:
+\begin{itemize}
+    \item Gerar \verb|.c| do flex: \verb|flex ctts.l|
+    \item Gerar \verb|.c| do yacc: \verb|yacc -d -v ctts.y|
+    \item Gerar o executável: \verb|gcc -o ctts y.tab.c|
+\end{itemize}
+
+O executável pode ser usado de formas diferentes dependendo de como é chamado e que flags são passadas:
+\begin{itemze}
+
+\end{itemize}
+
+Alguns dos testes realizados foram:
+\begin{itemize}
+
+\end{itemize}
 
 \section{Conclusão}
 
