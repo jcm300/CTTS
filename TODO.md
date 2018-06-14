@@ -10,3 +10,5 @@
 - [x] Allow the user to specify, via a flag, whether the input text is to be overwritten
 - [ ] Create a -h flag to present basic options/usage
 - [ ] Create a -i flag to toggle case sensitive matching
+- [ ] Variable size terms
+- [ ] Support for latex input
